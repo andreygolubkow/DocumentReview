@@ -6,24 +6,23 @@ using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace DocumentReview
 {
-    public class CommentTools
+    public static class CommentTools
     {
-        public static void AddCommentToParagraph(WordprocessingDocument document, OpenXmlElement paragraph,
-            string author, string initials, string comment)
+        public static void AddCommentNearElement( this WordprocessingDocument document, OpenXmlElement element,
+            Author author, string comment, string fontName = "Times New Roman", string fontSize = "28")
         {
             Comments comments = null;
-            string id = "0";
-
-            if (document.MainDocumentPart.GetPartsCountOfType<WordprocessingCommentsPart>() > 0)
+            int id = 0;
+            //var lastRun = paragraph.Descendants<Run>().ToList().LastOrDefault();
+            if (document.MainDocumentPart.GetPartsOfType<WordprocessingCommentsPart>().Any())
             {
                 comments =
                     document.MainDocumentPart.WordprocessingCommentsPart.Comments;
                 if (comments.HasChildren)
                 {
                     // Obtain an unused ID.
-                    id = comments.Descendants<Comment>().Select(e => e.Id.Value).Max();
-                    var i = int.Parse(id);
-                    id = (++i).ToString();
+                    id = comments.Descendants<Comment>().Select(e => Int32.Parse(e.Id.Value)).Max();
+                    id++;
                 }
             }
             else
@@ -35,13 +34,24 @@ namespace DocumentReview
             }
 
             // Compose a new Comment and add it to the Comments part.
-            Paragraph p = new Paragraph(new Run(new Text($"{comment} ID: {id}")));
+            Paragraph p = new Paragraph(new Run(new Text($"{comment} ID: {id}"), new RunProperties()
+            {
+                FontSize = new FontSize()
+                {
+                    Val = fontSize
+                },
+                RunFonts = new RunFonts()
+                {
+                    Ascii = fontName
+                }
+            }));
+
             Comment cmt =
                 new Comment()
                 {
-                    Id = id,
-                    Author = author,
-                    Initials = initials,
+                    Id = id.ToString(),
+                    Author = author.Name,
+                    Initials = author.Initials,
                     Date = DateTime.Now
                 };
             cmt.AppendChild(p);
@@ -50,17 +60,18 @@ namespace DocumentReview
 
             // Specify the text range for the Comment. 
             // Insert the new CommentRangeStart before the first run of paragraph.
-            paragraph.InsertBefore(new CommentRangeStart()
-            { Id = id }, paragraph.GetFirstChild<Run>());
+            element.InsertBeforeSelf(new CommentRangeStart()
+                { Id = id.ToString() });
+
 
             var commentEnd = new CommentRangeEnd()
-            { Id = id };
-            var lastRun = paragraph.Descendants<Run>();
+            { Id = id.ToString() };
+            
             // Insert the new CommentRangeEnd after last run of paragraph.
-            var cmtEnd = paragraph.InsertAfter(commentEnd, lastRun.Last());
+            var cmtEnd = element.InsertAfterSelf(commentEnd);
 
             // Compose a run with CommentReference and insert it.
-            paragraph.InsertAfter(new Run(new CommentReference() { Id = id }), cmtEnd);
+            commentEnd.InsertAfterSelf(new Run(new CommentReference() { Id = id.ToString() }));
         }
 
     }

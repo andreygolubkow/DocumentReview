@@ -120,6 +120,15 @@
   <data name="CheckBottomMargin" xml:space="preserve">
     <value>Проверьте нижнее поле</value>
   </data>
+  <data name="CheckFont" xml:space="preserve">
+    <value>Проверьте шрифт</value>
+  </data>
+  <data name="CheckFontColor" xml:space="preserve">
+    <value>Проверьте цвет шрифта</value>
+  </data>
+  <data name="CheckFontSize" xml:space="preserve">
+    <value>Проверьте размер шрифта</value>
+  </data>
   <data name="CheckLeftMargin" xml:space="preserve">
     <value>Проверьте левое поле</value>
   </data>

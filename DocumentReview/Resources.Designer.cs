@@ -70,6 +70,33 @@ namespace DocumentReview {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Check the font name.
+        /// </summary>
+        public static string CheckFont {
+            get {
+                return ResourceManager.GetString("CheckFont", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Check font color.
+        /// </summary>
+        public static string CheckFontColor {
+            get {
+                return ResourceManager.GetString("CheckFontColor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Check font size.
+        /// </summary>
+        public static string CheckFontSize {
+            get {
+                return ResourceManager.GetString("CheckFontSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Check the left margin.
         /// </summary>
         public static string CheckLeftMargin {

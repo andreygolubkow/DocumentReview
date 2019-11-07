@@ -120,6 +120,15 @@
   <data name="CheckBottomMargin" xml:space="preserve">
     <value>Check the bottom margin</value>
   </data>
+  <data name="CheckFont" xml:space="preserve">
+    <value>Check the font name</value>
+  </data>
+  <data name="CheckFontColor" xml:space="preserve">
+    <value>Check font color</value>
+  </data>
+  <data name="CheckFontSize" xml:space="preserve">
+    <value>Check font size</value>
+  </data>
   <data name="CheckLeftMargin" xml:space="preserve">
     <value>Check the left margin</value>
   </data>

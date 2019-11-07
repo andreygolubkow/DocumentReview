@@ -8,41 +8,43 @@ namespace DocumentReview
 {
     public static class PageViewCheckers
     {
-        public static void CheckHeader(WordprocessingDocument document, PageSize size)
+        public static void CheckFont(WordprocessingDocument document, Fonts fonts, FontParams fontParams = null)
         {
-            var sizes = GetPageSizes(document);
-            foreach (var s in sizes)
+            foreach (var p in document.MainDocumentPart.Document.Body.Descendants<Paragraph>())
             {
-                var paragraph = PageStructureTools.FindNearParagraphWithRun(s);
-                if (paragraph == null)
-                {
-                    paragraph = new Paragraph(new Run(new Text("")));
-                    s.Parent.InsertBeforeSelf(paragraph);
-                }
                 var comment = new StringBuilder();
 
-                if (size.Height != s.Height)
-                {
-                    comment.AppendLine(Resources.CheckPageHeight);
-                }
-                if (size.Width != s.Width)
-                {
-                    comment.AppendLine(Resources.CheckPageWidth);
-                }
-                if (s.Orient != null && size.Orient != null && s.Orient.HasValue && size.Orient.HasValue && (s.Orient.Value != size.Orient.Value))
-                {
-                    comment.AppendLine(Resources.CheckPageOrientation);
-                }
+                var runProperties = p.Descendants<RunProperties>();
 
-                if (s.Code != null && size.Code != null && s.Code.HasValue && size.Code.HasValue && (s.Code.Value != size.Code.Value))
+                foreach (var rp in runProperties)
                 {
-                    comment.AppendLine(Resources.CheckPageCode);
+                    if (rp.RunFonts != null)
+                    {
+                        if ((fonts.Ascii!= null && rp.RunFonts.Ascii != null &&  rp.RunFonts.Ascii.Value != fonts.Ascii)||
+                            (fonts.ComplexScript != null && rp.RunFonts.ComplexScript != null && rp.RunFonts.ComplexScript != fonts.ComplexScript) ||
+                            (fonts.HighAnsi != null && rp.RunFonts.HighAnsi != null && rp.RunFonts.HighAnsi != fonts.HighAnsi))
+                        {
+                            comment.AppendLine(Resources.CheckFont);
+                        }
+                    }
+
+                    //TOOD: Нужно сделать функцию получения стиля по умолчанию
+                    if (fontParams?.Size != null &&
+                        rp.FontSize != null && rp.FontSize.Val != fontParams.Size)
+                    {
+                        comment.AppendLine(Resources.CheckFontSize);
+                    }
+
+                    /*if (fontParams?.Color != null &&
+                        rp.Color != null && rp.Color.Val != fontParams.Color)
+                    {
+                        comment.AppendLine(Resources.CheckFontColor);
+                    }*/
+
                 }
-
-
                 if (comment.Length > 0)
                 {
-                    CommentTools.AddCommentToParagraph(document, paragraph, "Andrey", "GAA", comment.ToString());
+                    //CommentTools.AddCommentNearElement(document, p, "Andrey", "GAA", comment.ToString());
                 }
             }
         }
@@ -80,7 +82,7 @@ namespace DocumentReview
 
                 if (comment.Length > 0)
                 {
-                    CommentTools.AddCommentToParagraph(document, paragraph, "Andrey", "GAA", comment.ToString());
+                    //CommentTools.AddCommentToElement(document, paragraph, "Andrey", "GAA", comment.ToString());
                 }
             }
         }
@@ -119,7 +121,7 @@ namespace DocumentReview
 
                 if (comment.Length > 0)
                 {
-                    CommentTools.AddCommentToParagraph(document, paragraph, "Andrey", "GAA", comment.ToString());
+                    //CommentTools.AddCommentNearElement(document, paragraph, "Andrey", "GAA", comment.ToString());
                 }
             }
         }
