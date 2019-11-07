@@ -8,6 +8,45 @@ namespace DocumentReview
 {
     public static class PageViewCheckers
     {
+        public static void CheckHeader(WordprocessingDocument document, PageSize size)
+        {
+            var sizes = GetPageSizes(document);
+            foreach (var s in sizes)
+            {
+                var paragraph = PageStructureTools.FindNearParagraphWithRun(s);
+                if (paragraph == null)
+                {
+                    paragraph = new Paragraph(new Run(new Text("")));
+                    s.Parent.InsertBeforeSelf(paragraph);
+                }
+                var comment = new StringBuilder();
+
+                if (size.Height != s.Height)
+                {
+                    comment.AppendLine(Resources.CheckPageHeight);
+                }
+                if (size.Width != s.Width)
+                {
+                    comment.AppendLine(Resources.CheckPageWidth);
+                }
+                if (s.Orient != null && size.Orient != null && s.Orient.HasValue && size.Orient.HasValue && (s.Orient.Value != size.Orient.Value))
+                {
+                    comment.AppendLine(Resources.CheckPageOrientation);
+                }
+
+                if (s.Code != null && size.Code != null && s.Code.HasValue && size.Code.HasValue && (s.Code.Value != size.Code.Value))
+                {
+                    comment.AppendLine(Resources.CheckPageCode);
+                }
+
+
+                if (comment.Length > 0)
+                {
+                    CommentTools.AddCommentToParagraph(document, paragraph, "Andrey", "GAA", comment.ToString());
+                }
+            }
+        }
+
         public static void CheckMargins(WordprocessingDocument document, PageMargin margin)
         {
             var margins = GetMargins(document);
