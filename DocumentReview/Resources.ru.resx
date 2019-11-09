@@ -132,6 +132,9 @@
   <data name="CheckLeftMargin" xml:space="preserve">
     <value>Проверьте левое поле</value>
   </data>
+  <data name="CheckLineSpacing" xml:space="preserve">
+    <value>Проверьте межстрочный интервал</value>
+  </data>
   <data name="CheckPageCode" xml:space="preserve">
     <value>Проверьте тип страницы</value>
   </data>

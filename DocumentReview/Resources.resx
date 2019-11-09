@@ -132,6 +132,9 @@
   <data name="CheckLeftMargin" xml:space="preserve">
     <value>Check the left margin</value>
   </data>
+  <data name="CheckLineSpacing" xml:space="preserve">
+    <value>Check the line spacings</value>
+  </data>
   <data name="CheckPageCode" xml:space="preserve">
     <value>Check the page type</value>
   </data>

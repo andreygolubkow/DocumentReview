@@ -106,6 +106,15 @@ namespace DocumentReview {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Check the line spacings.
+        /// </summary>
+        public static string CheckLineSpacing {
+            get {
+                return ResourceManager.GetString("CheckLineSpacing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Check the page type.
         /// </summary>
         public static string CheckPageCode {

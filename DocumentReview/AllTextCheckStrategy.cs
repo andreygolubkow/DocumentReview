@@ -24,6 +24,7 @@ namespace DocumentReview
 
         public string[] RunFontsNames { get; set; } = {"Times New Roman"};
         public string[] FontSizes { get; set; } = {"28", "24"};
+        public string[] LineSpacing { get; set; } = {"360"};
 
         public void DoCheck(WordprocessingDocument document)
         {
@@ -42,6 +43,8 @@ namespace DocumentReview
 
                     bool fontSizeErr = !(FontSizes.Length>0);
                     bool runFontsErr = !(RunFontsNames.Length>0);
+                    bool lineSpacingErr = !(LineSpacing.Length > 0);
+
                     foreach (var rp in runProperties)
                     {
                         if (!fontSizeErr && rp.FontSize != null)
@@ -117,6 +120,43 @@ namespace DocumentReview
                         {
                             runFontsErr = CheckDefaultRunFonts(defaultStyles, comment);
                         }
+                        //Otstupi
+
+                            if (!lineSpacingErr && rp.Spacing != null)
+                            {
+                                if (!LineSpacing.Contains(rp.Spacing.Val.ToString()))
+                                {
+                                    comment.AppendLine(Resources.CheckLineSpacing);
+                                    fontSizeErr = true;
+                                }
+                            }
+                            else if (!fontSizeErr && rp.RunStyle != null)
+                            {
+                                var currentStyle = allStyles.FindById(rp.RunStyle.Val);
+                                if (currentStyle == null)
+                                {
+                                    continue;
+                                }
+
+
+                                //Тут остановился. Ищем межстрочний интервал
+                                var fontSize = FindFirstFontSize(currentStyle, allStyles);
+                                if (fontSize != null && !FontSizes.Contains(fontSize))
+                                {
+                                    comment.AppendLine(Resources.CheckFontSize);
+                                    fontSizeErr = true;
+                                }
+                                else
+                                {
+                                    fontSizeErr = CheckDefaultFontSize(defaultStyles, comment);
+                                }
+                            }
+                            else if (!fontSizeErr)
+                            {
+                                fontSizeErr = CheckDefaultFontSize(defaultStyles, comment);
+                            }
+
+
                     }
 
                     //Добавим коммент
