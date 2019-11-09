@@ -24,7 +24,8 @@ namespace DocumentReview
                 Check(args[0]);
             }
             //Check(@"C:\Users\andreygolubkow\Desktop\Лабы\Проверка\Zurbaev_Vlasova_Sadalova_588-2.docx");
-            Check(@"C:\Users\andreygolubkow\Desktop\Лабы\Проверка\lab_5.docx");
+            //Check(@"C:\Users\andreygolubkow\Desktop\Лабы\Проверка\lab_5.docx");
+            Check(@"D:\5_laba.docx");
         }
 
         
